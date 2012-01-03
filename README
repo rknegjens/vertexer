@@ -1,2 +1,26 @@
-TODO
++--------------+
+|   vertexer   |
++--+-----------+
+   | version 1 
+   +----------+
 
+Meet Vertexer, a simple 3D grid with which you can place paths in: 
+3D. 
+
+Vertexer has vim-like controls and functionality. This means that
+to insert paths you enter INSERT mode, in which the mouse is stuck 
+to an insertion plane that can be dynamically moved up and down as
+you add vertices to your path. To view your path from different
+angles/perspectives you enter VISUAL mode, which has controls that
+resemble a first person shooter. You can look around with the
+mouse while moving forwards/backwards and strafing up or sideways
+using the keyboard. In the DEFAULT mode you can freely select
+paths with the mouse and subsequently rename, restyle or delete
+them. Finally, commands are entered in COMMAND mode, a terminal-
+like prompt.
+
+Vertexer interfaces with POV-ray using the functions in
+toolshed.py to generate a .pov file.
+
+The command :h in vertexer presents the help menu. Alternatively,
+refer to the files HELPTXT1 and HELPTXT2.
