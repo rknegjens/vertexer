@@ -1,0 +1,30 @@
+------------------------------------------------
+CHANGING BETWEEN MODES
+
+i              - insert mode (inserting paths)
+v              - visual mode (move around in 3D)
+Esc            - default mode (edit paths)
+:              - command mode
+
+------------------------------------------------
+COMMAND MODE
+
+:h             - toggle this Help menu
+:q             - quit
+:w [filename]  - write to file, filename optional
+:e [filename]  - edit file (i.e. open file)
+:reset         - delete all paths
+:pov           - generate and run povray file
+
+:mv            - rename selected path
+:ls            - change selected path line style
+:rm            - remove selected path (delete)
+
+------------------------------------------------
+INSERT MODE
+
+Mouse click    - place a path vertex
+Mouse click x2 - ends the path
+j              - move the insertion plane down
+k              - move the insertion plane up
+u              - undo last vertex placement

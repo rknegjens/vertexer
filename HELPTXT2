@@ -1,0 +1,25 @@
+------------------------------------------------
+DEFAULT MODE
+Hover the mouse over a path's vertex to see its
+details. 
+Left click on the vertex to select the path.
+See command mode for possible operations.
+
+------------------------------------------------
+VISUAL MODE
+
+Mouse click-hold - look around 
+Mouse-scroll     - zoom in/out
+
+a                - strafe camera left
+d                - strafe camera right
+w                - strafe camera up
+s                - strafe camera down
+e                - zoom in (move forwards)
+q                - zoom out (move backwards)
+h                - rotate left (yaw)
+l                - rotate right (yaw)
+j                - rotate down (pitch)
+k                - rotate up (pitch)
++                - grow grid
+-                - shrink grid
