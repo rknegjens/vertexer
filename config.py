@@ -97,3 +97,5 @@ D_NRM_RAD = 0.5
 ########
 
 P_LINE_STYLES = ["line","curve","wiggle","helix","light"]
+#P_LINE_ARROWS = ["none","front","back"]
+

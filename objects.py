@@ -11,7 +11,7 @@ from OpenGL.GLU import *
 
 import copy
 import math
-from vectors import Vec3, Quat
+from tools.vectors import Vec3, Quat
 from config import *
 
 class Grid :
@@ -441,10 +441,12 @@ class Camera :
 class Path :
     
     # should it take the first vertex or a list of vertices?
-    def __init__(self, name, style="line"):
+    def __init__(self, name, style="line", radius=0.5, arrow="none"):
         self.vertices = []
         self.name = name 
         self.style = style
+        self.radius = radius
+        self.arrow = arrow
 
     # is this fast enough? could also just do it with unique names...
     def __eq__ (self, other) :
@@ -468,6 +470,10 @@ class Path :
             return self.name
         elif index.lower() == "style" :
             return self.style
+        elif index.lower() == "radius" :
+            return self.radius
+        elif index.lower() == "arrow" :
+            return self.arrow
 
     def __setitem__(self, index, item):
         if index.lower() == "name" :
@@ -475,6 +481,10 @@ class Path :
                 self.name = item
         elif index.lower() == "style" :
             self.style = item
+        elif index.lower() == "radius" :
+            self.radius = item
+        elif index.lower() == "arrow" :
+            self.arrow = item
 
     def append(self, vertex) :
         self.vertices.append(vertex[:])

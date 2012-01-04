@@ -18,6 +18,8 @@ COMMAND MODE
 
 :mv            - rename selected path
 :ls            - change selected path line style
+:lr            - change selected path line radius
+:ca            - path arrow (none/front/back)
 :rm            - remove selected path (delete)
 
 ------------------------------------------------

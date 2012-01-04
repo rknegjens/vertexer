@@ -18,7 +18,7 @@ import shelve
 
 from config import *
 from objects import Grid, Camera, Path
-from vectors import Vec3
+from tools.vectors import Vec3
 
 # File IO
 output_path = None
@@ -229,20 +229,32 @@ def DrawGLScene():
     if modeString == M_DEFAULT :
         if hlPath is not None :
             glColor3f(1.0,1.0,1.0)  
-            nameString = "Name: %s" % (hlPath["name"])
-            styleString = "Style: %s" % (hlPath["style"])
+            nameString =   "Name  : %10s" % (hlPath["name"])
+            styleString =  "Style : %10s" % (hlPath["style"])
+            radiusString = "Radius: %10s" % (hlPath["radius"])
+            arrowString =  "Arrow : %10s" % (hlPath["arrow"])
             glRasterPos3f(window_width - 10*len(nameString) -15, 30 ,0 )
             drawString(nameString)
             glRasterPos3f(window_width - 10*len(styleString) -15, 50 ,0 )
             drawString(styleString)
+            glRasterPos3f(window_width - 10*len(styleString) -15, 70 ,0 )
+            drawString(radiusString)
+            glRasterPos3f(window_width - 10*len(styleString) -15, 90 ,0 )
+            drawString(arrowString)
         elif selPath is not None :
             glColor3f(1.0,1.0,1.0)  
-            nameString = "Name: %s" % (selPath["name"])
-            styleString = "Style: %s" % (selPath["style"])
+            nameString =   "Name  : %10s" % (selPath["name"])
+            styleString =  "Style : %10s" % (selPath["style"])
+            radiusString = "Radius: %10s" % (selPath["radius"])
+            arrowString =  "Arrow : %10s" % (selPath["arrow"])
             glRasterPos3f(window_width - 10*len(nameString) -15, 30 ,0 )
             drawString(nameString)
             glRasterPos3f(window_width - 10*len(styleString) -15, 50 ,0 )
             drawString(styleString)
+            glRasterPos3f(window_width - 10*len(styleString) -15, 70 ,0 )
+            drawString(radiusString)
+            glRasterPos3f(window_width - 10*len(styleString) -15, 90 ,0 )
+            drawString(arrowString)
 
     # Draw help hint or complete message
     if modeString == M_HELP :
@@ -417,6 +429,7 @@ def keyPressed(*args):
                         "# Do not manually edit - use vertexer to load the .vtx file instead.\n",
                         "# When run with python, this script will generate a POV-ray file,\n",
                         "# and attempt to run it with povray.\n\n",
+                        "# toolshed module must exist in PYTHONPATH\n",
                         "import toolshed as ts\n\n",
                     ]
 
@@ -485,14 +498,14 @@ def keyPressed(*args):
                     if not isinstance(shelf["camera"],Camera) or not isinstance(shelf["paths"],list) :
                         raise Exception
                 except :
-                    messageString = "Opening file %s for editing failed" % filename + SAVE_EXT
+                    messageString = "Opening file %s for editing failed" % (filename + SAVE_EXT)
                     editOK = False
 
                 if editOK :
                     cam = shelf["camera"]
                     paths = shelf["paths"]
                     pathCounter = shelf["pathCounter"]
-                    messageString = "File %s successfully opened for editing" % filename + SAVE_EXT 
+                    messageString = "File %s successfully opened for editing" % (filename + SAVE_EXT)
                     workfile = filename
                 
                 shelf.close
@@ -523,13 +536,24 @@ def keyPressed(*args):
             elif commandString[:3] == "ls\040" :
                 # restyle selected path
                 style = commandString[3:]
-                goodStyle = False
                
                 if style in P_LINE_STYLES :
                     selPath["style"] = style
                     messageString = "Line style changed to %s" % style 
                 else :
                     messageString = "Line style %s does not exists" % style 
+                
+                setMode(M_DEFAULT)
+
+            elif commandString[:3] == "lr\040" :
+                # change selected path radius
+                radius = commandString[3:]
+               
+                try :
+                    selPath["radius"] = float(radius)
+                    messageString = "Line radius changed to %s" % float(radius)
+                except ValueError :
+                    messageString = "Line radius %s not valid float" % radius 
                 
                 setMode(M_DEFAULT)
 
@@ -858,7 +882,6 @@ def main():
     # Start Event Processing Engine 
     glutMainLoop()
     
-# Print message to console, and kick off the main to get it rolling.
 if __name__ == "__main__":
     print("Type :q to quit.")
     main()
