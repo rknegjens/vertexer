@@ -14,13 +14,14 @@ COMMAND MODE
 :w [filename]  - write to file, filename optional
 :e [filename]  - edit file (i.e. open file)
 :reset         - delete all paths
-:pov           - generate and run povray file
+:pov           - append to and run povray file
+:npov          - generate and run new povray file
 
 :mv            - rename selected path
-:ls            - change selected path line style
-:lr            - change selected path line radius
-:ca            - path arrow (none/front/back)
 :rm            - remove selected path (delete)
+:sty           - change selected path line style
+:rad           - change selected path line radius
+:col           - change selected path line colour
 
 ------------------------------------------------
 INSERT MODE

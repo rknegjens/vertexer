@@ -134,7 +134,7 @@ def runPovFile(transparency=True, width=800, height=600) :
 
     call(["povray", "-w800", "-h600", "+a0.3", "+ua", _povFile])
 
-def line(path, name, radius=0.5, colour="Yellow",arrow=False, arrPos=0.5, arrRad=1.5) :
+def line(path, name, radius=0.5, colour="Yellow") :
     """
     INPUT :
         @path:      List of 3D coordinates (array [x,y,z]) 
@@ -192,36 +192,36 @@ def line(path, name, radius=0.5, colour="Yellow",arrow=False, arrPos=0.5, arrRad
         ])
         FILE.writelines(writeVertex(i2))
 
-        if arrow is True and arrRad > 1 and arrPos >= 0 and arrPos <= 1:
-            # Make arrow 20% of line length
-            # should it be pointy if at the end of line?
-            # in that case need to remove relevant sphere...
-            v1 = path[i1]
-            v2 = path[i2]
-            
-            vec1 = Vec3(v1[0],v1[1],v1[2])
-            vec2 = Vec3(v2[0],v2[1],v2[2])
-            
-            diff = vec2 - vec1
-            length = diff.length()
-           
-            # arrPos is centre of arrow cone
-            if arrPos > 0.90 : 
-                arrPos = 0.90
-            elif arrPos < 0.10 :
-                arrPos = 0.10
+        #if arrow is True and arrRad > 1 and arrPos >= 0 and arrPos <= 1:
+        #    # Make arrow 20% of line length
+        #    # should it be pointy if at the end of line?
+        #    # in that case need to remove relevant sphere...
+        #    v1 = path[i1]
+        #    v2 = path[i2]
+        #    
+        #    vec1 = Vec3(v1[0],v1[1],v1[2])
+        #    vec2 = Vec3(v2[0],v2[1],v2[2])
+        #    
+        #    diff = vec2 - vec1
+        #    length = diff.length()
+        #   
+        #    # arrPos is centre of arrow cone
+        #    if arrPos > 0.90 : 
+        #        arrPos = 0.90
+        #    elif arrPos < 0.10 :
+        #        arrPos = 0.10
 
-            a1 = vec1 + diff*(arrPos-0.1)
-            a2 = vec1 + diff*(arrPos+0.1)
+        #    a1 = vec1 + diff*(arrPos-0.1)
+        #    a2 = vec1 + diff*(arrPos+0.1)
 
-            FILE.writelines([
-                "cone {\n",
-                "   <%f, %f, %f>, %f\n" % (a1[0],a1[1],a1[2],radius*arrRad),
-                "   <%f, %f, %f>, %f\n" % (a2[0],a2[1],a2[2],radius),
-                "   pigment { color COLOUR }\n",
-                "   finish  { FINISH }\n",
-                "}\n\n",
-            ])
+        #    FILE.writelines([
+        #        "cone {\n",
+        #        "   <%f, %f, %f>, %f\n" % (a1[0],a1[1],a1[2],radius*arrRad),
+        #        "   <%f, %f, %f>, %f\n" % (a2[0],a2[1],a2[2],radius),
+        #        "   pigment { color COLOUR }\n",
+        #        "   finish  { FINISH }\n",
+        #        "}\n\n",
+        #    ])
 
 
         i1 = i2
@@ -277,7 +277,7 @@ def curve(path, name, radius=0.5, colour="Yellow") :
 
     FILE.close()
 
-def wiggle(path, name, radius=0.5, colour="Yellow", ampl=4, waveLen=4, arrow=False, arrPos=1, arrRad=2) :
+def wiggle(path, name, radius=0.5, colour="Yellow", ampl=4, waveLen=4) :
     """
     INPUT :
         @path:      List of 3D coordinates (array [x,y,z]) 
@@ -286,9 +286,6 @@ def wiggle(path, name, radius=0.5, colour="Yellow", ampl=4, waveLen=4, arrow=Fal
         @colour:    Colour of line
         @ample:     Amplitude of wiggle
         @waveLen: Suggested length of wiggle wavelenfth 
-        @arrow:     Whether to place arrow (True/False)
-        @arrPos:    If placing arrow, relative position between v1 and v2 (0-1)
-        @arrRad:    If placing arrow, radius relative to line radius (1>)
     """
 
     global _povFile, _camLoc, _existing
@@ -356,7 +353,7 @@ def wiggle(path, name, radius=0.5, colour="Yellow", ampl=4, waveLen=4, arrow=Fal
 
     FILE.close()
 
-def helix(path, name,radius=0.5, colour="Yellow", ampl=4, waveLen=4, arrow=False, arrPos=1, arrRad=2) :
+def helix(path, name, radius=0.5, colour="Yellow", ampl=4, waveLen=4) :
     """
     INPUT :
         @path:      List of 3D coordinates (array [x,y,z]) 
@@ -365,9 +362,6 @@ def helix(path, name,radius=0.5, colour="Yellow", ampl=4, waveLen=4, arrow=False
         @colour:    Colour of line
         @ample:     Amplitude of helix
         @waveLen:   Suggested length of helix wavelenfth 
-        @arrow:     Whether to place arrow (True/False)
-        @arrPos:    If placing arrow, relative position between v1 and v2 (0-1)
-        @arrRad:    If placing arrow, radius relative to line radius (1>)
     """
 
     global _povFile, _camLoc, _existing
@@ -438,11 +432,13 @@ def helix(path, name,radius=0.5, colour="Yellow", ampl=4, waveLen=4, arrow=False
 
     FILE.close()
 
-def light(path, name, colour="White") :
+def light(path, name, radius=0.5,colour="White") :
     """
     INPUT :
         @path:      List of 3D coordinates (array [x,y,z]) 
         @name:      A unique identifier
+        @radius:    Unused (need a rewrite) 
+        @colour:    Colour of light
     """
 
     global _povFile, _existing

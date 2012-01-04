@@ -232,7 +232,7 @@ def DrawGLScene():
             nameString =   "Name  : %10s" % (hlPath["name"])
             styleString =  "Style : %10s" % (hlPath["style"])
             radiusString = "Radius: %10s" % (hlPath["radius"])
-            arrowString =  "Arrow : %10s" % (hlPath["arrow"])
+            arrowString =  "Colour: %10s" % (hlPath["colour"])
             glRasterPos3f(window_width - 10*len(nameString) -15, 30 ,0 )
             drawString(nameString)
             glRasterPos3f(window_width - 10*len(styleString) -15, 50 ,0 )
@@ -246,7 +246,7 @@ def DrawGLScene():
             nameString =   "Name  : %10s" % (selPath["name"])
             styleString =  "Style : %10s" % (selPath["style"])
             radiusString = "Radius: %10s" % (selPath["radius"])
-            arrowString =  "Arrow : %10s" % (selPath["arrow"])
+            arrowString =  "Colour: %10s" % (selPath["colour"])
             glRasterPos3f(window_width - 10*len(nameString) -15, 30 ,0 )
             drawString(nameString)
             glRasterPos3f(window_width - 10*len(styleString) -15, 50 ,0 )
@@ -319,6 +319,7 @@ def keyPressed(*args):
            KEY_GROW_GRID, KEY_SHRINK_GRID, \
            SAVE_EXT
     global M_INSERT, M_HELP, M_COMMAND, M_VISUAL, M_DEFAULT
+    global P_LINE_STYLES, P_LINE_COLOURS
 
     # Mode selection keys
     ##################################
@@ -449,7 +450,7 @@ def keyPressed(*args):
                     feynStr = []
                     feynStr.append("""ts.createPovFile("%s.pov",camLookAt=camLookAt,camLoc=camLocation,camUp=[0,0,1])\n"""%(filename))
                     for path in paths :
-                        feynStr.append("""ts.%s(%s, name="%s:%s")\n"""%(path["style"],path["name"],path["style"],path["name"]))
+                        feynStr.append("""ts.%s(%s, name="%s:%s", radius=%f, colour="%s")\n"""%(path["style"],path["name"],path["style"],path["name"],path["radius"],path["colour"]))
 
                     # light now integrated as a path (each vertex is light source)
                     #feynStr.append("ts.pointLight()\n\n")
@@ -468,18 +469,42 @@ def keyPressed(*args):
 
                 setMode(M_DEFAULT)
             
-            elif commandString[:3] == "pov" :
+            elif commandString == "pov" or commandString == "npov" :
                 # Execute python .pov production 
+                pyfile = workfile + ".py"
+                povfile = workfile + ".pov"
+                
                 try :
-                    filename = workfile + ".py"
-                    # check if file exists
-                    FILE = open(filename)
-                    FILE.close()
-
                     from subprocess import call
-                    call(["python2", filename])
+
+                    # check if .py file exists
+                    (open(pyfile)).close()
+                    
+                    # check if .pov file exists
+                    try :
+                        (open(povfile)).close()
+                            
+                        if commandString == "npov" : 
+                            messageString = "Existing povray file %s overwritten" % ( povfile )
+                            call(["rm", povfile])
+                        else :
+                            messageString = "Appended to existing povray file %s" % ( povfile )
+
+                    except IOError as e :
+                        messageString = "Created new povray file %s" % ( povfile )
+
+                    # append tools as module path
+                    tools_module = os.path.abspath(os.path.dirname(sys.argv[0])) + "/tools"
+                    os.environ["PYTHONPATH"] = tools_module
+
+                    # change working directory to that of filename and then back
+                    working_dir = os.getcwd()
+                    os.chdir(os.path.dirname(pyfile))
+                    call(["python2", pyfile])
+                    os.chdir(working_dir)
+
                 except IOError as e:
-                    messageString = "Could not initiate povray as %s does not exist" % ( filename )
+                    messageString = "Could not initiate povray as %s does not exist" % ( pyfile )
                 
                 setMode(M_DEFAULT)
 
@@ -533,21 +558,21 @@ def keyPressed(*args):
                     messageString = "Path name changed to %s" % newName 
                 setMode(M_DEFAULT)
 
-            elif commandString[:3] == "ls\040" :
+            elif commandString[:4] == "sty\040" :
                 # restyle selected path
-                style = commandString[3:]
+                style = commandString[4:]
                
                 if style in P_LINE_STYLES :
                     selPath["style"] = style
                     messageString = "Line style changed to %s" % style 
                 else :
-                    messageString = "Line style %s does not exists" % style 
+                    messageString = "Line style %s does not exist" % style 
                 
                 setMode(M_DEFAULT)
 
-            elif commandString[:3] == "lr\040" :
+            elif commandString[:4] == "rad\040" :
                 # change selected path radius
-                radius = commandString[3:]
+                radius = commandString[4:]
                
                 try :
                     selPath["radius"] = float(radius)
@@ -557,6 +582,18 @@ def keyPressed(*args):
                 
                 setMode(M_DEFAULT)
 
+            elif commandString[:4] == "col\040" :
+                # change selected path colour
+                colour = commandString[4].upper() + commandString[5:].lower()
+               
+                if colour in P_LINE_COLOURS :
+                    selPath["colour"] = colour
+                    messageString = "Line colour changed to %s" % colour 
+                else :
+                    messageString = "Line colour %s does not exist" % colour 
+                
+                setMode(M_DEFAULT)
+            
             elif commandString[:2] == "rm" :
                 # delete selected path
                 if insPath == selPath :

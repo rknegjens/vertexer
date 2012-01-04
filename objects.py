@@ -441,12 +441,12 @@ class Camera :
 class Path :
     
     # should it take the first vertex or a list of vertices?
-    def __init__(self, name, style="line", radius=0.5, arrow="none"):
+    def __init__(self, name, style="line", radius=0.5, colour="Yellow"):
         self.vertices = []
         self.name = name 
         self.style = style
         self.radius = radius
-        self.arrow = arrow
+        self.colour = colour
 
     # is this fast enough? could also just do it with unique names...
     def __eq__ (self, other) :
@@ -472,8 +472,8 @@ class Path :
             return self.style
         elif index.lower() == "radius" :
             return self.radius
-        elif index.lower() == "arrow" :
-            return self.arrow
+        elif index.lower() == "colour" :
+            return self.colour
 
     def __setitem__(self, index, item):
         if index.lower() == "name" :
@@ -483,8 +483,8 @@ class Path :
             self.style = item
         elif index.lower() == "radius" :
             self.radius = item
-        elif index.lower() == "arrow" :
-            self.arrow = item
+        elif index.lower() == "colour" :
+            self.colour = item
 
     def append(self, vertex) :
         self.vertices.append(vertex[:])
@@ -541,7 +541,7 @@ class Path :
         return pStr[:-1] + "]\n"
 
     def printAscii (self) :
-        pStr = "%s %s %d  " % (self.name, self.style,len(self.vertices))
+        pStr = "%10s %6s %7s %f %d  " % (self.name, self.style, self.colour, self.radius, len(self.vertices))
         for vertex in self.vertices :
             vertStr = "%f %f %f" % (vertex[0],vertex[1],vertex[2])
             pStr = pStr + vertStr + "  "

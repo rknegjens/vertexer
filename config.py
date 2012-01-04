@@ -96,6 +96,6 @@ D_NRM_RAD = 0.5
 # PATHS
 ########
 
-P_LINE_STYLES = ["line","curve","wiggle","helix","light"]
-#P_LINE_ARROWS = ["none","front","back"]
+P_LINE_STYLES  = ["line","curve","wiggle","helix","light"]
+P_LINE_COLOURS = ["Yellow","Red","Blue","Green","Orange"]
 
